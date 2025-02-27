@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-DO - Lead Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4A90E2;
+            --secondary-color: #50E3C2;
+            --background-color: #F4F7FC;
+            --text-color: #333;
+            --card-bg-color: #FFFFFF;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            box-shadow: var(--shadow);
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+        }
+        h1 { 
+            color: white;
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 600;
+        }
+        .lead-card { 
+            background-color: var(--card-bg-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+        .lead-card:hover {
+            transform: translateY(-5px);
+        }
+        .lead-name {
+            color: var(--primary-color);
+            margin: 0 0 10px 0;
+            font-size: 1.5em;
+        }
+        .lead-info {
+            margin-bottom: 15px;
+        }
+        .schedule-time { 
+            margin-right: 10px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100%;
+            max-width: 250px;
+            font-size: 14px;
+            color: var(--text-color);
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .schedule-time:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+        }
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .schedule-btn { 
+            background-color: var(--primary-color);
+            color: white;
+            margin-top: 10px;
+        }
+        .schedule-btn:hover {
+            background-color: #3A7BC7;
+            transform: translateY(-2px);
+        }
+        .view-details-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            margin-top: 10px;
+            margin-right: 10px;
+        }
+        .view-details-btn:hover {
+            background-color: #3CC7A8;
+            transform: translateY(-2px);
+        }
+        .join-meeting-btn {
+            background-color: #4CAF50;
+            color: white;
+            margin-top: 10px;
+        }
+        .join-meeting-btn:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+        .button-group {
+            margin-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .login-btn, .logout-btn { 
+            background-color: white;
+            color: var(--primary-color);
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .login-btn:hover, .logout-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        #auth-container {
+            text-align: right;
+            padding: 10px 0;
+            margin: 10px;
+        }
+        .recording-player {
+            margin-top: 15px;
+        }
+        .recording-player audio {
+            width: 100%;
+        }
+        /* Flatpickr custom styles */
+        .flatpickr-calendar {
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            font-family: 'Poppins', sans-serif;
+        }
+        .flatpickr-day.selected, 
+        .flatpickr-day.startRange, 
+        .flatpickr-day.endRange, 
+        .flatpickr-day.selected.inRange, 
+        .flatpickr-day.startRange.inRange, 
+        .flatpickr-day.endRange.inRange, 
+        .flatpickr-day.selected:focus, 
+        .flatpickr-day.startRange:focus, 
+        .flatpickr-day.endRange:focus, 
+        .flatpickr-day.selected:hover, 
+        .flatpickr-day.startRange:hover, 
+        .flatpickr-day.endRange:hover, 
+        .flatpickr-day.selected.prevMonthDay, 
+        .flatpickr-day.startRange.prevMonthDay, 
+        .flatpickr-day.endRange.prevMonthDay, 
+        .flatpickr-day.selected.nextMonthDay, 
+        .flatpickr-day.startRange.nextMonthDay, 
+        .flatpickr-day.endRange.nextMonthDay {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        .flatpickr-day.selected.startRange + .endRange:not(:nth-child(7n+1)), 
+        .flatpickr-day.startRange.startRange + .endRange:not(:nth-child(7n+1)), 
+        .flatpickr-day.endRange.startRange + .endRange:not(:nth-child(7n+1)) {
+            box-shadow: -10px 0 0 var(--primary-color);
+        }
+        .flatpickr-day.week.selected {
+            box-shadow: -5px 0 0 var(--primary-color), 5px 0 0 var(--primary-color);
+        }
+        .flatpickr-weekdays {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .flatpickr-current-month .flatpickr-monthDropdown-months {
+            background-color: var(--background-color);
+        }
+        .flatpickr-current-month .flatpickr-monthDropdown-months, 
+        .flatpickr-current-month input.cur-year {
+            color: var(--text-color);
+        }
+        .flatpickr-time input:hover, 
+        .flatpickr-time .flatpickr-am-pm:hover, 
+        .flatpickr-time input:focus, 
+        .flatpickr-time .flatpickr-am-pm:focus {
+            background: #e2e2e2;
+        }
+        .flatpickr-day.today {
+            border-color: var(--secondary-color);
+        }
+        .flatpickr-day.today:hover, 
+        .flatpickr-day.today:focus {
+            border-color: var(--secondary-color);
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .copy-link-btn {
+            background-color: #6c757d;
+            color: white;
+            margin-left: 10px;
+            margin-top: 10px;
+        }
+        .copy-link-btn:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="log-container">
+            <h1>Pitch-Pilot | Lead Management</h1>
+        </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div id="auth-container">
+            <% if (!user) { %>
+                <a href="/auth/zoom" class="login-btn">Login with Zoom</a>
+            <% } else { %>
+                <span>Logged in</span>
+                <a href="/logout" class="logout-btn">Logout</a>
+            <% } %>
+        </div>
+
+        <div id="lead-container">
+            <!-- Lead cards will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <!-- Bootstrap Modal -->
+    <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageModalLabel">Message</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalMessage">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    let isAuthenticated = <%= !!user %>;
+    let messageModal;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+
+        const response = await fetch('/api/leads');
+        const leads = await response.json();
+
+        const container = document.getElementById('lead-container');
+        leads.forEach(lead => {
+            const card = document.createElement('div');
+            card.className = 'lead-card';
+            card.innerHTML = `
+                <h2 class="lead-name">${lead.name}</h2>
+                <div class="lead-info">
+                    <p>Email: ${lead.email}</p>
+                    <p>Phone: ${lead.phone}</p>
+                </div>
+                <input type="text" id="schedule-time-${lead.id}" class="schedule-time" placeholder="Select date and time">
+                <button class="btn schedule-btn" onclick="scheduleCall(${lead.id})">Schedule Call</button>
+                ${lead.recording_id ? `
+                    <div class="recording-player">
+                        <p>Recording:</p>
+                        <audio controls src="/audio/${lead.recording_id}"></audio>
+                    </div>
+                ` : ''}
+                <div class="button-group">
+                    <a href="/lead/${lead.id}" class="btn view-details-btn">View All Details</a>
+                    <span id="zoom-link-${lead.id}">
+    ${lead.zoom_link ? `
+        <a href="${lead.zoom_link}" target="_blank" class="btn join-meeting-btn">Join Meeting</a>
+        <button class="btn copy-link-btn" onclick="copyToClipboard('${lead.zoom_link}')">Copy Link</button>
+    ` : ''}
+</span>
+                    
+                </div>
+            `;
+            container.appendChild(card);
+
+            // Initialize Flatpickr for this card's date input
+            flatpickr(`#schedule-time-${lead.id}`, {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                minDate: "today",
+                time_24hr: true
+            });
+        });
+    });
+
+    function showModal(message) {
+        document.getElementById('modalMessage').textContent = message;
+        messageModal.show();
+    }
+
+    function copyToClipboard(text) {
+    navigator.clipboard.writeText(text)
+        .then(() => {
+            showModal('Zoom link copied to clipboard!');
+        })
+        .catch(err => {
+            console.error('Failed to copy text: ', err);
+            showModal('Failed to copy Zoom link. Please try again.');
+        });
+}
+
+    async function scheduleCall(leadId) {
+        if (!isAuthenticated) {
+            showModal('Please log in with Zoom first');
+            setTimeout(() => {
+                window.location.href = '/auth/zoom';
+            }, 2000);
+            return;
+        }
+
+        const scheduleTimeInput = document.getElementById(`schedule-time-${leadId}`);
+        const scheduledTime = scheduleTimeInput.value;
+        
+        if (!scheduledTime) {
+            showModal('Please select a schedule time.');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/schedule-call', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ leadId, scheduledTime }),
+            });
+            const result = await response.json();
+            console.log('Schedule call response:', result);
+            if (result.success) {
+                const zoomLinkSpan = document.getElementById(`zoom-link-${leadId}`);
+                zoomLinkSpan.innerHTML = `
+                    <a href="${result.zoomLink}" target="_blank" class="btn join-meeting-btn">Join Meeting</a>
+                    <button class="btn copy-link-btn" onclick="copyToClipboard('${result.zoomLink}')">Copy Link</button>
+                `;
+                showModal('Call scheduled successfully!');
+            } else {
+                if (result.needsAuth) {
+                    showModal('You need to authenticate with Zoom first. Redirecting to Zoom login...');
+                    setTimeout(() => {
+                        window.location.href = '/auth/zoom';
+                    }, 2000);
+                } else {
+                    showModal('Failed to schedule call. Error: ' + (result.details || result.error));
+                }
+            }
+        } catch (error) {
+            console.error('Error scheduling call:', error);
+            showModal('An error occurred while scheduling the call. Please try again.');
+        }
+        
+    }
+    </script>
+</body>
+</html>

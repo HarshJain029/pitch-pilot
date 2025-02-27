@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pitch-Pilot - Lead Details</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary-color: #4a90e2;
+        --secondary-color: #50e3c2;
+        --background-color: #f4f7fc;
+        --text-color: #333;
+        --card-bg-color: #ffffff;
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      header {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 20px 0;
+        box-shadow: var(--shadow);
+      }
+      h1 {
+        color: white;
+        margin: 0;
+        font-size: 2.5em;
+        font-weight: 600;
+      }
+      .lead-details {
+        background-color: var(--card-bg-color);
+        border-radius: 8px;
+        padding: 60px;
+        margin-top: 20px;
+        box-shadow: var(--shadow);
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+        color: var(--primary-color);
+      }
+      input,
+      textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-family: "Poppins", sans-serif;
+      }
+      .text-area-size {
+        min-height: 125px;
+      }
+      input:read-only,
+      textarea:read-only {
+        background-color: #f0f0f0;
+      }
+      .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+      }
+      #editBtn {
+        background-color: var(--secondary-color);
+        color: white;
+      }
+      #editBtn:hover {
+        background-color: #3cc7a8;
+      }
+      #saveBtn {
+        background-color: var(--primary-color);
+        color: white;
+      }
+      #saveBtn:hover {
+        background-color: #3a7bc7;
+      }
+      #saveBtn:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+      }
+      #downloadCsvBtn {
+        background-color: #28a745;
+        color: white;
+        margin-left: 10px;
+      }
+      #downloadCsvBtn:hover {
+        background-color: #218838;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1>Lead Details</h1>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="lead-details">
+        <form id="leadForm">
+          <div class="form-group">
+            <label for="name">Name:</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value="<%= lead.name %>"
+              readonly
+            />
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value="<%= lead.email %>"
+              readonly
+            />
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone:</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              value="<%= lead.phone %>"
+              readonly
+            />
+          </div>
+          <div class="form-group">
+            <label for="profession">Profession:</label>
+            <input
+              type="text"
+              id="profession"
+              name="profession"
+              value="<%= recordings && recordings[0] ? recordings[0].profession : '' %>"
+              readonly
+            />
+          </div>
+          <div class="form-group">
+            <label for="yearsOfExperience">Years of Experience:</label>
+            <input
+              type="number"
+              id="yearsOfExperience"
+              name="yearsOfExperience"
+              value="<%= recordings && recordings[0] ? recordings[0].years_of_experience : '' %>"
+              readonly
+            />
+          </div>
+          <div class="form-group">
+            <label for="customerPros">Positives:</label>
+            <textarea id="customerPros" name="Positives" readonly>
+<%= recordings && recordings[0] && recordings[0].customer_pros ? JSON.parse(recordings[0].customer_pros).join(', ') : '' %></textarea
+            >
+          </div>
+          <div class="form-group">
+            <label for="customerCons">Negatives:</label>
+            <textarea id="customerCons" name="Negatives" readonly>
+<%= recordings && recordings[0] && recordings[0].customer_cons ? JSON.parse(recordings[0].customer_cons).join(', ') : '' %></textarea
+            >
+          </div>
+          <div class="form-group">
+            <label for="callDuration">Call Duration (seconds):</label>
+            <input
+              type="number"
+              id="callDuration"
+              name="callDuration"
+              value="<%= recordings && recordings[0] ? recordings[0].call_duration : '' %>"
+              readonly
+            />
+          </div>
+          <div class="form-group">
+            <label for="callTime">Call Time:</label>
+            <input
+              type="datetime-local"
+              id="callTime"
+              name="callTime"
+              value="<%= recordings && recordings[0] ? new Date(recordings[0].call_time).toISOString().slice(0, 16) : '' %>"
+              readonly
+            />
+          </div>
+          <div class="form-group">
+            <label for="approachStrategy">Approach Strategy:</label>
+            <textarea id="approachStrategy" name="approachStrategy" class="text-area-size" readonly>
+<%= recordings && recordings[0] ? recordings[0].approach_strategy : '' %></textarea
+            >
+          </div>
+          <div class="form-group">
+            <label for="leadScore">Lead Score:</label>
+            <input
+              type="number"
+              id="leadScore"
+              name="leadScore"
+              value="<%= recordings && recordings[0] ? recordings[0].lead_score : '' %>"
+              readonly
+            />
+          </div>
+          <div class="form-group">
+            <label for="leadScoreReasoning">Lead Score Reasoning:</label>
+            <textarea
+              id="leadScoreReasoning"
+              name="leadScoreReasoning"
+              class="text-area-size"
+              readonly
+            >
+<%= recordings && recordings[0] ? recordings[0].lead_score_reasoning : '' %></textarea
+            >
+          </div>
+          <div class="form-group">
+            <label for="salesAgentTips">Tips for Sales Agent:</label>
+            <textarea id="salesAgentTips" name="salesAgentTips" class="tips-container text-area-size" readonly>
+<%= recordings && recordings[0] && recordings[0].sales_agent_tips ? JSON.parse(recordings[0].sales_agent_tips).map(tip => `• ${tip}`).join('\n') : '' %></textarea>
+          </div>
+          <button type="button" id="editBtn" class="btn">Edit</button>
+          <button type="button" id="saveBtn" class="btn" disabled>Save</button>
+          <button type="button" id="downloadCsvBtn" class="btn">Update sheet</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      const form = document.getElementById("leadForm");
+      const editBtn = document.getElementById("editBtn");
+      const saveBtn = document.getElementById("saveBtn");
+      const downloadCsvBtn = document.getElementById("downloadCsvBtn");
+
+      editBtn.addEventListener("click", () => {
+        Array.from(form.elements).forEach((element) => {
+          if (element.tagName.toLowerCase() !== "button") {
+            element.readOnly = false;
+          }
+        });
+        saveBtn.disabled = false;
+      });
+S
+      saveBtn.addEventListener("click", async () => {
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        // Handle customerPros and customerCons
+        data.customerPros = data.Positives
+          ? data.Positives.split(",").map((item) => item.trim())
+          : [];
+        data.customerCons = data.Negatives
+          ? data.Negatives.split(",").map((item) => item.trim())
+          : [];
+
+        try {
+          const response = await fetch("/api/lead/<%= lead.id %>", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+
+          if (response.ok) {
+            alert("Lead details updated successfully");
+            Array.from(form.elements).forEach((element) => {
+              if (element.tagName.toLowerCase() !== "button") {
+                element.readOnly = true;
+              }
+            });
+            saveBtn.disabled = true;
+          } else {
+            throw new Error("Failed to update lead details");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Failed to update lead details");
+        }
+      });
+
+      downloadCsvBtn.addEventListener("click",async () => {
+        try {
+          const data = Object.fromEntries(formData.entries());
+            const response = await fetch('/api/update-sheet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: data,
+            });
+            const result = await response.json();
+            console.log('Schedule call response:', result);
+            if (result.success) {
+                const zoomLinkSpan = document.getElementById(`zoom-link-${leadId}`);
+                zoomLinkSpan.innerHTML = `
+                    <a href="${result.zoomLink}" target="_blank" class="btn join-meeting-btn">Join Meeting</a>
+                    <button class="btn copy-link-btn" onclick="copyToClipboard('${result.zoomLink}')">Copy Link</button>
+                `;
+                showModal('Call scheduled successfully!');
+            } else {
+                if (result.needsAuth) {
+                    showModal('You need to authenticate with Zoom first. Redirecting to Zoom login...');
+                    setTimeout(() => {
+                        window.location.href = '/auth/zoom';
+                    }, 2000);
+                } else {
+                    showModal('Failed to schedule call. Error: ' + (result.details || result.error));
+                }
+            }
+        } catch (error) {
+            console.error('Error scheduling call:', error);
+            showModal('An error occurred while scheduling the call. Please try again.');
+        }
+      });
+    </script>
+  </body>
+</html>
